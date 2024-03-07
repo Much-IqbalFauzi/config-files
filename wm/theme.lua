@@ -28,7 +28,7 @@ theme.fg_normal                                 = "#15D0F7"
 theme.fg_focus                                  = "#FFFFFF"
 theme.fg_urgent                                 = "#CC9393"
 theme.bg_normal                                 = "#1A1A1A"
-theme.bg_focus                                  = "#24A9C4"
+-- theme.bg_focus                                  = "#24A9C4"
 theme.bg_urgent                                 = "#1A1A1A"
 theme.border_width                              = dpi(4)
 theme.border_normal                             = "#000102"
@@ -36,7 +36,7 @@ theme.border_focus                              = "#0D72CA"
 theme.border_marked                             = "#CC9393"
 theme.tasklist_bg_focus                         = "#1A1A1A"
 theme.tasklist_fg_item                          = "#1A1A1A"
-theme.titlebar_bg_focus                         = theme.bg_focus
+-- theme.titlebar_bg_focus                         = theme.bg_focus
 theme.titlebar_bg_normal                        = theme.bg_normal
 theme.titlebar_fg_focus                         = theme.fg_focus
 theme.menu_height                               = dpi(20)
@@ -221,7 +221,11 @@ local net = lain.widget.net({
 })
 
 -- Separators
-local spr2    = wibox.widget.separator
+local spr2    = wibox.widget {
+    markup = "<span foreground='#ff0000'> ❖ </span>",
+    widget = wibox.widget.textbox,
+}
+local spr1     = wibox.widget.textbox('-')
 local spr     = wibox.widget.textbox(' ')
 local arrl_dl = separators.arrow_left(theme.bg_focus, "alpha")
 local arrl_ld = separators.arrow_left("alpha", theme.bg_focus)
@@ -283,38 +287,67 @@ function theme.at_screen_connect(s)
             spr,
             s.mytaglist,
             s.mypromptbox,
+            -- spr,
+            -- spr,
+        },
+        -- s.mytasklist, -- Middle widget
+        -- spr,
+        nil,
+        { -- Right widgets
+            layout = wibox.layout.fixed.horizontal,
+            -- spr,
+            -- arrl_ld,
+            cpuicon,
+            cpu.widget,
+
+            -- spr,
+            spr2,
+            -- spr,
+
+            memicon,
+            mem.widget,
+            
+            spr2,
+
+            tempicon,
+            temp.widget,
+            
+            spr2,
+            
+            baticon,
+            bat.widget,
+            
+            spr2,
+
+            mytextclock,
+            
+            spr2,
+
+            todo_widget(),
+            
+            spr2,
+
+            -- wibox.widget.systray(),
+            theme.volume.widget,
+            spr,
             spr,
             spr,
         },
+    }
+
+    -- Create the bottom wibox
+    s.mybottomwibox = awful.wibar({ position = "bottom", screen = s, border_width = 0, height = dpi(20), bg = theme.bg_normal, fg = theme.fg_normal })
+
+    -- Add widgets to the bottom wibox
+    s.mybottomwibox:setup {
+        layout = wibox.layout.align.horizontal,
+        { -- Left widgets
+            layout = wibox.layout.fixed.horizontal,
+        },
         s.mytasklist, -- Middle widget
-        -- nil,
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            todo_widget(),
-            spr,
-            arrl_ld,
-            wibox.container.background(memicon, theme.bg_focus),
-            wibox.container.background(mem.widget, theme.bg_focus),
-            arrl_dl,
-            tempicon,
-            temp.widget,
-            arrl_ld,
-            wibox.container.background(cpuicon, theme.bg_focus),
-            wibox.container.background(cpu.widget, theme.bg_focus),
-            arrl_dl,
-            baticon,
-            bat.widget,
-            arrl_ld,
-            wibox.container.background(mytextclock, theme.bg_focus),
-            arrl_dl,
-            wibox.widget.systray(),
-            theme.volume.widget,
-            spr,
-            arrl_ld,
-            wibox.container.background(s.mylayoutbox, theme.bg_focus),
-            spr,
-            spr,
-            spr,
+            s.mylayoutbox,
         },
     }
 end
