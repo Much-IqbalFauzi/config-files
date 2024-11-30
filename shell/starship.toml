@@ -181,8 +181,9 @@ format = '⌜[$symbol($version)]($style)⌟'
 format = '⌜[$symbol$workspace]($style)⌟'
 
 [time]
-format = '⌜[$time]($style)⌟'
-
+disabled = false
+format = '[$time]($style) ▉ '
+time_format = '%R'
 
 [vagrant]
 format = '⌜[$symbol($version)]($style)⌟'
